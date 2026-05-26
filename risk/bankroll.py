@@ -1,36 +1,32 @@
-"""
-risk/bankroll.py — Tracks session PnL and enforces stop-loss / take-profit.
-"""
+"""Tracks session PnL and enforces stop rules."""
+
+from __future__ import annotations
 
 import logging
-import config
+
+from risk.stoploss import StopRules
 
 logger = logging.getLogger(__name__)
 
 
 class BankrollManager:
-    """
-    Tracks:
-      - session_pnl (net profit/loss since bot started)
-      - consecutive_losses
-      - consecutive_wins
-      - total_trades (today)
-      - starting_balance
-    """
+    """Tracks session PnL, wins/losses, and risk-stop state."""
 
-    def __init__(self, starting_balance: float):
+    def __init__(self, starting_balance: float, stop_rules: StopRules | None = None):
         self.starting_balance = starting_balance
-        self.session_pnl: float = 0.0
-        self.consecutive_losses: int = 0
-        self.consecutive_wins: int = 0
-        self.total_trades: int = 0
-        self.wins: int = 0
-        self.losses: int = 0
-
-    # ─── Trade recording ─────────────────────────────────────────────────────
+        self.stop_rules = stop_rules or StopRules()
+        self.session_pnl = 0.0
+        self.consecutive_losses = 0
+        self.consecutive_wins = 0
+        self.total_trades = 0
+        self.wins = 0
+        self.losses = 0
+        self.gross_profit = 0.0
+        self.gross_loss = 0.0
 
     def record_win(self, profit: float) -> None:
         self.session_pnl += profit
+        self.gross_profit += profit
         self.consecutive_losses = 0
         self.consecutive_wins += 1
         self.wins += 1
@@ -38,33 +34,22 @@ class BankrollManager:
         logger.info("WIN +%.2f | Session PnL: %.2f", profit, self.session_pnl)
 
     def record_loss(self, loss: float) -> None:
-        """loss should be a positive number representing amount lost."""
+        """Record a loss as a positive amount."""
         self.session_pnl -= loss
+        self.gross_loss += loss
         self.consecutive_wins = 0
         self.consecutive_losses += 1
         self.losses += 1
         self.total_trades += 1
         logger.info("LOSS -%.2f | Session PnL: %.2f", loss, self.session_pnl)
 
-    # ─── Checks ──────────────────────────────────────────────────────────────
-
     def should_stop(self) -> tuple[bool, str]:
-        """Return (True, reason) if bot must stop, else (False, '')."""
-        if self.session_pnl <= config.STOP_LOSS:
-            return True, f"Stop-loss triggered (PnL={self.session_pnl:.2f})"
-        if self.session_pnl >= config.TAKE_PROFIT:
-            return True, f"Take-profit reached (PnL={self.session_pnl:.2f})"
-        if self.total_trades >= config.MAX_DAILY_TRADES:
-            return True, f"Max daily trades reached ({self.total_trades})"
-        return False, ""
-
-    # ─── Stats ───────────────────────────────────────────────────────────────
+        """Return (True, reason) if the bot must stop."""
+        return self.stop_rules.evaluate(self.session_pnl, self.total_trades)
 
     @property
     def win_rate(self) -> float:
-        if self.total_trades == 0:
-            return 0.0
-        return self.wins / self.total_trades
+        return self.wins / self.total_trades if self.total_trades else 0.0
 
     def summary(self) -> dict:
         return {
@@ -75,4 +60,6 @@ class BankrollManager:
             "win_rate": round(self.win_rate * 100, 1),
             "consecutive_losses": self.consecutive_losses,
             "consecutive_wins": self.consecutive_wins,
+            "avg_profit": round(self.gross_profit / self.wins, 2) if self.wins else 0.0,
+            "avg_loss": round(self.gross_loss / self.losses, 2) if self.losses else 0.0,
         }

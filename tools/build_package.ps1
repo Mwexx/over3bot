@@ -24,6 +24,7 @@ $items = @(
     "strategies",
     "web",
     ".env.example",
+    "ARCHITECTURE_AUDIT.md",
     "config.py",
     "Dockerfile",
     "docker-compose.yml",

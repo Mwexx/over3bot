@@ -15,7 +15,7 @@ No bot can guarantee profit. Test on a demo account first and trade only money y
 | Markets | Scans R_10, R_25, R_50, R_75, and R_100 in the Python bot |
 | Risk | Stop-loss, take-profit, max daily trades, cooldown, loss guard |
 | Staking | Safer martingale sequence instead of pure doubling |
-| Records | SQLite trade history and log file |
+| Records | SQLite trade history, latency, execution speed, market stats, and log file |
 | Dashboard | Rich terminal dashboard plus a Deriv-style local web preview |
 | Export | `exports/deriv-over3-bot.xml` for Deriv Bot Builder |
 | Download | `dist/deriv-over3-package.zip` package for moving to another device |
@@ -26,14 +26,18 @@ No bot can guarantee profit. Test on a demo account first and trade only money y
 deriv_bot/
   api/                 Deriv WebSocket client
   analytics/           Digit tracking and SQLite logging
+  analytics/performance.py  In-memory performance metrics
+  api/auth.py          Token validation helpers
   dashboard/           Terminal dashboard
   exports/             Deriv Bot Builder XML export
   risk/                Bankroll and martingale logic
+  risk/stoploss.py     Stop-loss, take-profit, and max-trade rules
   strategies/          Trading strategy, filters, and market selector
   web/                 Deriv-style local dashboard preview
   tools/               Packaging script
   main.py              Python bot entry point
   config.py            Environment-driven settings
+  ARCHITECTURE_AUDIT.md  Blueprint compliance notes
 ```
 
 ## Import Into Deriv Bot Builder
@@ -106,3 +110,16 @@ Move that ZIP to another desktop or phone. On phones, use the XML import in Deri
 - Keep `STOP_LOSS` enabled.
 - Demo test before using a real account.
 - Digit markets are still random enough that losses can happen quickly.
+
+## Architecture Checklist
+
+- Connects to Deriv WebSocket API with authorization and reconnect backoff.
+- Scans R_10, R_25, R_50, R_75, and R_100.
+- Trades only DIGITOVER barrier 3.
+- Tracks digit distribution, Over 3 rate, spike ratio, stability, momentum, tick speed, and market score.
+- Filters low-score, unstable, high-latency, high-spike, and loss-streak conditions.
+- Supports adjustable stake, martingale, stop loss, take profit, cooldown, and max daily trades.
+- Logs symbol, stake, digit, result, PnL, balance, market score, latency, execution time, and analysis metrics to SQLite.
+- Shows win rate, average profit/loss, best/worst market, latency, execution speed, market ranking, and risk state in the Rich dashboard.
+
+See `ARCHITECTURE_AUDIT.md` for the focused blueprint scan notes.
