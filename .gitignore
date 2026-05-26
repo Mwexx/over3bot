@@ -6,3 +6,4 @@ database/*.db
 logs/*.log
 dist/
 *.zip
+.deriv-binary-bot/
