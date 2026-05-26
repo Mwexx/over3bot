@@ -59,8 +59,10 @@
           <p><span>Market:</span> Derived / Continuous Indices / Volatility 100 Index</p>
           <p><span>Trade Type:</span> Digits / Over / Barrier 3</p>
           <p><span>Duration:</span> 1 tick</p>
-          <p><span>Stake:</span> USD 1.00</p>
+          <p><span>Stake:</span> Asked at bot start</p>
           <p><span>Stop loss:</span> Asked at bot start</p>
+          <p><span>Target profit:</span> Asked at bot start</p>
+          <p><span>Martingale:</span> Multiplier asked at bot start</p>
           <p><span>Extra:</span> Python bot scans R_10, R_25, R_50, R_75, R_100</p>
         </article>
 
@@ -76,7 +78,7 @@
 
         <article class="block restart">
           <h3>4. Restart trading conditions</h3>
-          <p>Trade again only while total profit is above the selected stop loss.</p>
+          <p>Win resets stake. Loss multiplies stake. Trading stops at target profit or stop loss.</p>
         </article>
       </section>
 

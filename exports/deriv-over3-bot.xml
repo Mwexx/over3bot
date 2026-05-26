@@ -1,6 +1,10 @@
 <xml xmlns="http://www.w3.org/1999/xhtml" collection="false">
   <variables>
     <variable type="" id="stop_loss_var">stop_loss</variable>
+    <variable type="" id="target_profit_var">target_profit</variable>
+    <variable type="" id="base_stake_var">base_stake</variable>
+    <variable type="" id="martingale_multiplier_var">martingale_multiplier</variable>
+    <variable type="" id="current_stake_var">current_stake</variable>
   </variables>
   <block type="trade" id="over3_trade_root" x="0" y="0">
     <statement name="INITIALIZATION">
@@ -20,6 +24,73 @@
             </value>
           </block>
         </value>
+        <next>
+          <block type="variables_set" id="set_target_profit">
+            <field name="VAR" id="target_profit_var" variabletype="">target_profit</field>
+            <value name="VALUE">
+              <block type="text_prompt_ext" id="prompt_target_profit">
+                <mutation type="NUMBER"></mutation>
+                <field name="TYPE">NUMBER</field>
+                <value name="TEXT">
+                  <shadow type="text" id="target_profit_prompt_shadow">
+                    <field name="TEXT">Target profit amount</field>
+                  </shadow>
+                  <block type="text" id="target_profit_prompt_text">
+                    <field name="TEXT">Target profit amount</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="set_base_stake">
+                <field name="VAR" id="base_stake_var" variabletype="">base_stake</field>
+                <value name="VALUE">
+                  <block type="text_prompt_ext" id="prompt_base_stake">
+                    <mutation type="NUMBER"></mutation>
+                    <field name="TYPE">NUMBER</field>
+                    <value name="TEXT">
+                      <shadow type="text" id="base_stake_prompt_shadow">
+                        <field name="TEXT">Base stake amount</field>
+                      </shadow>
+                      <block type="text" id="base_stake_prompt_text">
+                        <field name="TEXT">Base stake amount</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" id="set_martingale_multiplier">
+                    <field name="VAR" id="martingale_multiplier_var" variabletype="">martingale_multiplier</field>
+                    <value name="VALUE">
+                      <block type="text_prompt_ext" id="prompt_martingale_multiplier">
+                        <mutation type="NUMBER"></mutation>
+                        <field name="TYPE">NUMBER</field>
+                        <value name="TEXT">
+                          <shadow type="text" id="martingale_multiplier_prompt_shadow">
+                            <field name="TEXT">Martingale multiplier</field>
+                          </shadow>
+                          <block type="text" id="martingale_multiplier_prompt_text">
+                            <field name="TEXT">Martingale multiplier</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id="set_current_stake">
+                        <field name="VAR" id="current_stake_var" variabletype="">current_stake</field>
+                        <value name="VALUE">
+                          <block type="variables_get" id="get_base_stake_initial">
+                            <field name="VAR" id="base_stake_var" variabletype="">base_stake</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
       </block>
     </statement>
     <statement name="SUBMARKET">
@@ -41,8 +112,8 @@
           </block>
         </value>
         <value name="AMOUNT">
-          <block type="math_number" id="over3_amount">
-            <field name="NUM">1</field>
+          <block type="variables_get" id="get_current_stake_amount">
+            <field name="VAR" id="current_stake_var" variabletype="">current_stake</field>
           </block>
         </value>
         <value name="PREDICTION">
@@ -74,31 +145,89 @@
   </block>
   <block type="after_purchase" id="over3_after_purchase" x="0" y="548">
     <statement name="AFTERPURCHASE_STACK">
-      <block type="controls_if" id="stop_loss_guard">
+      <block type="controls_if" id="martingale_update">
+        <mutation else="1"></mutation>
         <value name="IF0">
-          <block type="logic_compare" id="stop_loss_compare">
-            <field name="OP">GT</field>
-            <value name="A">
-              <block type="total_profit" id="current_total_profit"></block>
+          <block type="contract_check_result" id="check_last_contract_win">
+            <field name="CHECK_RESULT">win</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set" id="reset_stake_after_win">
+            <field name="VAR" id="current_stake_var" variabletype="">current_stake</field>
+            <value name="VALUE">
+              <block type="variables_get" id="get_base_stake_after_win">
+                <field name="VAR" id="base_stake_var" variabletype="">base_stake</field>
+              </block>
             </value>
-            <value name="B">
-              <block type="math_single" id="negative_stop_loss">
-                <field name="OP">NEG</field>
-                <value name="NUM">
-                  <shadow type="math_number" id="stop_loss_shadow">
-                    <field name="NUM">20</field>
-                  </shadow>
-                  <block type="variables_get" id="get_stop_loss">
-                    <field name="VAR" id="stop_loss_var" variabletype="">stop_loss</field>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="variables_set" id="increase_stake_after_loss">
+            <field name="VAR" id="current_stake_var" variabletype="">current_stake</field>
+            <value name="VALUE">
+              <block type="math_arithmetic" id="multiply_stake">
+                <field name="OP">MULTIPLY</field>
+                <value name="A">
+                  <block type="variables_get" id="get_current_stake_for_multiply">
+                    <field name="VAR" id="current_stake_var" variabletype="">current_stake</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="variables_get" id="get_martingale_multiplier">
+                    <field name="VAR" id="martingale_multiplier_var" variabletype="">martingale_multiplier</field>
                   </block>
                 </value>
               </block>
             </value>
           </block>
-        </value>
-        <statement name="DO0">
-          <block type="trade_again" id="over3_trade_again"></block>
         </statement>
+        <next>
+          <block type="controls_if" id="profit_and_loss_guard">
+            <value name="IF0">
+              <block type="logic_operation" id="profit_guard_and">
+                <field name="OP">AND</field>
+                <value name="A">
+                  <block type="logic_compare" id="target_profit_compare">
+                    <field name="OP">LT</field>
+                    <value name="A">
+                      <block type="total_profit" id="total_profit_for_target"></block>
+                    </value>
+                    <value name="B">
+                      <block type="variables_get" id="get_target_profit_guard">
+                        <field name="VAR" id="target_profit_var" variabletype="">target_profit</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="logic_compare" id="stop_loss_compare">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="total_profit" id="total_profit_for_stop_loss"></block>
+                    </value>
+                    <value name="B">
+                      <block type="math_single" id="negative_stop_loss">
+                        <field name="OP">NEG</field>
+                        <value name="NUM">
+                          <shadow type="math_number" id="stop_loss_shadow">
+                            <field name="NUM">20</field>
+                          </shadow>
+                          <block type="variables_get" id="get_stop_loss">
+                            <field name="VAR" id="stop_loss_var" variabletype="">stop_loss</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="trade_again" id="over3_trade_again"></block>
+            </statement>
+          </block>
+        </next>
       </block>
     </statement>
   </block>
