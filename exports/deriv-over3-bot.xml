@@ -1,0 +1,56 @@
+<xml xmlns="https://developers.google.com/blockly/xml" is_dbot="true" collection="false">
+  <variables>
+    <variable id="base_stake">base_stake</variable>
+    <variable id="stop_loss">stop_loss</variable>
+    <variable id="take_profit">take_profit</variable>
+    <variable id="loss_count">loss_count</variable>
+    <variable id="next_stake">next_stake</variable>
+  </variables>
+  <block type="trade_definition" id="trade_parameters" x="32" y="32">
+    <field name="MARKET_LIST">synthetic_index</field>
+    <field name="SUBMARKET_LIST">random_index</field>
+    <field name="SYMBOL_LIST">R_100</field>
+    <field name="TRADETYPE_LIST">digits</field>
+    <field name="TYPE_LIST">overunder</field>
+    <field name="CANDLEINTERVAL_LIST">60</field>
+    <field name="DURATIONTYPE_LIST">t</field>
+    <field name="DURATION">1</field>
+    <field name="BARRIER">3</field>
+    <field name="CURRENCY_LIST">USD</field>
+    <field name="AMOUNT">1</field>
+    <field name="BASIS_LIST">stake</field>
+    <next>
+      <block type="before_purchase" id="purchase_conditions">
+        <statement name="BEFOREPURCHASE_STACK">
+          <block type="purchase" id="purchase_over3">
+            <field name="PURCHASE_LIST">DIGITOVER</field>
+          </block>
+        </statement>
+        <next>
+          <block type="during_purchase" id="sell_conditions">
+            <statement name="DURINGPURCHASE_STACK">
+              <block type="controls_if" id="sell_if_available">
+                <value name="IF0">
+                  <block type="check_sell" id="sell_available" />
+                </value>
+                <statement name="DO0">
+                  <block type="sell_at_market" id="sell_market" />
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="after_purchase" id="restart_conditions">
+                <statement name="AFTERPURCHASE_STACK">
+                  <block type="trade_again" id="trade_again" />
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+  <comment pinned="false" h="120" w="520" x="32" y="420">
+    Import this XML in Deriv Bot Builder. It mirrors the Python bot's base DIGIT OVER 3 setup: Volatility 100, 1 tick duration, barrier 3, stake 1 USD. The Python bot includes the extra scanning, filtering, SQLite logging, and safer martingale logic.
+  </comment>
+</xml>

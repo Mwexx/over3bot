@@ -1,0 +1,426 @@
+:root {
+  --red: #ff3f52;
+  --teal: #49b5b5;
+  --ink: #22252a;
+  --muted: #666;
+  --line: #dedede;
+  --panel: #f3f4f5;
+  --block: #075878;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #eef0f2;
+}
+
+a,
+button {
+  color: inherit;
+  font: inherit;
+}
+
+.topbar,
+.tabs,
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar {
+  height: 60px;
+  padding: 0 24px 0 0;
+}
+
+.brand-mark {
+  display: grid;
+  width: 62px;
+  height: 60px;
+  place-items: center;
+  color: #fff;
+  background: var(--red);
+  font-size: 34px;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.top-links {
+  display: flex;
+  gap: 32px;
+  font-size: 22px;
+}
+
+.top-links a,
+.toolbar a,
+.quick {
+  text-decoration: none;
+}
+
+.product-badge {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-left: auto;
+  border-radius: 8px;
+  color: #fff;
+  background: var(--red);
+  font-weight: 800;
+}
+
+.product-name {
+  font-size: 24px;
+  font-style: italic;
+}
+
+.deposit {
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px;
+  padding: 14px 26px;
+  color: #fff;
+  background: var(--red);
+  font-weight: 800;
+}
+
+.balance {
+  color: var(--teal);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #333;
+  border-radius: 50%;
+}
+
+.tabs {
+  height: 102px;
+  padding: 0 24px;
+  background: #f0f1f2;
+}
+
+.tabs a {
+  padding: 36px 24px;
+  text-decoration: none;
+  font-size: 22px;
+}
+
+.tabs .active {
+  background: #fff;
+  font-weight: 800;
+}
+
+.run-button {
+  margin-left: auto;
+  border: 0;
+  border-radius: 6px 0 0 6px;
+  padding: 18px 28px;
+  color: #fff;
+  background: var(--teal);
+  font-weight: 800;
+}
+
+.run-state {
+  align-self: center;
+  min-width: 360px;
+  padding: 18px;
+  border: 1px solid #d0d0d0;
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
+  background: #fff;
+  text-align: center;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 344px minmax(520px, 1fr) 526px;
+  gap: 24px;
+  min-height: calc(100vh - 202px);
+}
+
+.blocks-menu,
+.summary {
+  background: #fff;
+}
+
+.blocks-menu {
+  padding: 12px 14px;
+}
+
+.quick {
+  display: block;
+  margin-bottom: 14px;
+  border-radius: 6px;
+  padding: 17px;
+  color: #fff;
+  background: var(--red);
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.blocks-menu h2 {
+  margin: 0 -14px;
+  padding: 20px;
+  background: var(--panel);
+  text-align: center;
+}
+
+.search {
+  display: block;
+  margin: 18px 12px 22px;
+}
+
+.search span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.search input {
+  width: 100%;
+  border: 1px solid #d0d3d6;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 18px;
+}
+
+.blocks-menu button {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #eee;
+  padding: 17px 14px;
+  background: #fff;
+  text-align: left;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.canvas {
+  position: relative;
+  overflow: auto;
+  background: #fff;
+  min-height: 628px;
+  padding: 12px 16px 70px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid #d2d7dc;
+  border-radius: 6px;
+  padding: 12px 20px;
+  background: #fff;
+}
+
+.toolbar button,
+.toolbar a {
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 4px 18px 4px 0;
+  background: transparent;
+}
+
+.block {
+  position: absolute;
+  width: 254px;
+  border-radius: 4px;
+  background: #f6f7f8;
+  box-shadow: inset 0 0 0 1px #d8d8d8;
+}
+
+.block h3 {
+  margin: 0;
+  border-radius: 4px 4px 0 0;
+  padding: 9px 12px;
+  color: #fff;
+  background: var(--block);
+  font-size: 13px;
+}
+
+.block p {
+  margin: 8px 10px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.block span {
+  color: var(--muted);
+}
+
+.trade-params {
+  left: 70px;
+  top: 142px;
+  width: 320px;
+}
+
+.purchase {
+  left: 70px;
+  top: 526px;
+}
+
+.sell {
+  left: 526px;
+  top: 142px;
+}
+
+.restart {
+  left: 526px;
+  top: 290px;
+}
+
+.summary-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+}
+
+.summary-tabs button {
+  flex: 1;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  padding: 18px 8px;
+  background: #fff;
+  font-size: 21px;
+}
+
+.summary-tabs .active {
+  border-color: var(--red);
+  font-weight: 800;
+}
+
+.empty-state {
+  min-height: 236px;
+  margin: 12px 24px 0;
+  padding: 68px 42px;
+  background: #f4f4f4;
+  color: #4b4b4b;
+  text-align: center;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px 18px;
+  margin: 0;
+  padding: 26px 28px;
+  background: #f1f2f3;
+  text-align: center;
+}
+
+.metrics dt {
+  font-weight: 800;
+}
+
+.metrics dd {
+  margin: 14px 0 0;
+  color: #444;
+}
+
+.reset {
+  width: calc(100% - 48px);
+  margin: 18px 24px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  padding: 11px;
+  background: #fff;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.statusbar {
+  justify-content: flex-end;
+  height: 40px;
+  padding: 0 24px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+@media (max-width: 1100px) {
+  .top-links {
+    display: none;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
+  .run-state {
+    min-width: 240px;
+  }
+
+  .canvas {
+    min-height: 740px;
+  }
+
+  .summary {
+    order: 3;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    gap: 10px;
+  }
+
+  .product-name,
+  .balance,
+  .deposit {
+    font-size: 16px;
+  }
+
+  .deposit {
+    padding: 10px 12px;
+  }
+
+  .workspace {
+    gap: 12px;
+  }
+
+  .blocks-menu {
+    padding: 10px;
+  }
+
+  .canvas {
+    padding: 10px;
+  }
+
+  .block {
+    position: static;
+    width: 100%;
+    margin-top: 14px;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}

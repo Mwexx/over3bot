@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deriv Over 3 Bot Builder</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark">d</div>
+      <nav class="top-links" aria-label="Primary">
+        <a href="#">Trader's Hub</a>
+        <a href="#">Cashier</a>
+        <a href="#">Reports</a>
+      </nav>
+      <div class="product-badge">DB</div>
+      <strong class="product-name">deriv Bot</strong>
+      <button class="deposit">Deposit</button>
+      <span class="balance">0.00 USD</span>
+      <span class="avatar" aria-hidden="true"></span>
+    </header>
+
+    <nav class="tabs" aria-label="Bot sections">
+      <a href="#">Dashboard</a>
+      <a class="active" href="#">Bot Builder</a>
+      <a href="#">Charts</a>
+      <a href="#">Tutorials</a>
+      <button class="run-button" type="button">Run</button>
+      <strong class="run-state">Bot is not running</strong>
+    </nav>
+
+    <main class="workspace">
+      <aside class="blocks-menu" aria-label="Blocks menu">
+        <a class="quick" href="../exports/deriv-over3-bot.xml" download>Quick strategy</a>
+        <h2>Blocks menu</h2>
+        <label class="search">
+          <span>Search</span>
+          <input type="search" aria-label="Search blocks" />
+        </label>
+        <button>Trade parameters</button>
+        <button>Purchase conditions</button>
+        <button>Sell conditions (optional)</button>
+        <button>Restart trading conditions</button>
+        <button>Analysis</button>
+        <button>Utility</button>
+      </aside>
+
+      <section class="canvas" aria-label="Bot workspace">
+        <div class="toolbar" aria-label="Workspace tools">
+          <button title="Reset">Reset</button>
+          <button title="Import">Import</button>
+          <a href="../exports/deriv-over3-bot.xml" download title="Download XML">Save XML</a>
+          <a href="../dist/deriv-over3-package.zip" download title="Download package">Download ZIP</a>
+        </div>
+
+        <article class="block trade-params">
+          <h3>1. Trade parameters</h3>
+          <p><span>Market:</span> Derived / Continuous Indices / Volatility 100 Index</p>
+          <p><span>Trade Type:</span> Digits / Over / Barrier 3</p>
+          <p><span>Duration:</span> 1 tick</p>
+          <p><span>Stake:</span> USD 1.00</p>
+          <p><span>Extra:</span> Python bot scans R_10, R_25, R_50, R_75, R_100</p>
+        </article>
+
+        <article class="block purchase">
+          <h3>2. Purchase conditions</h3>
+          <p>Purchase DIGIT OVER 3 when filters are clear.</p>
+        </article>
+
+        <article class="block sell">
+          <h3>3. Sell conditions</h3>
+          <p>If sell is available, sell at market.</p>
+        </article>
+
+        <article class="block restart">
+          <h3>4. Restart trading conditions</h3>
+          <p>Trade again after settlement unless risk limits stop the bot.</p>
+        </article>
+      </section>
+
+      <aside class="summary" aria-label="Run summary">
+        <div class="summary-tabs">
+          <button class="active">Summary</button>
+          <button>Transactions</button>
+          <button>Journal</button>
+        </div>
+        <div class="empty-state">
+          When you're ready to trade, hit <strong>Run</strong>. You'll be able to track performance here.
+        </div>
+        <dl class="metrics">
+          <div><dt>Total stake</dt><dd>0.00 USD</dd></div>
+          <div><dt>Total payout</dt><dd>0.00 USD</dd></div>
+          <div><dt>No. of runs</dt><dd>0</dd></div>
+          <div><dt>Contracts lost</dt><dd>0</dd></div>
+          <div><dt>Contracts won</dt><dd>0</dd></div>
+          <div><dt>Total profit/loss</dt><dd>0.00 USD</dd></div>
+        </dl>
+        <button class="reset" type="button">Reset</button>
+      </aside>
+    </main>
+
+    <footer class="statusbar">
+      <span class="dot"></span>
+      <time id="clock">2026-05-26 17:21:17 GMT</time>
+      <span>EN</span>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>

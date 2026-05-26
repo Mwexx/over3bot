@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  deriv-bot:
+    build: .
+    container_name: deriv_over3_bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./database:/app/database
+      - ./logs:/app/logs
+    stdin_open: true
+    tty: true
